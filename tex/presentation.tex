@@ -1,0 +1,63 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage{minted}
+
+\title[Julia]{Introduction to the Julia Programming Language}
+\author{Matthew Balch}
+\institute{HackRVA}
+\date{September 17, 2016}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+\frametitle{Who Am I?}
+I'm Matthew Balch. My career has included numerous computer languages with 
+Perl, Python, PHP, C, C++, Javascript, and many others. I've been programming 
+in Julia for around a year for work projects as an alternative to R, Python, and MATLAB.
+I also maintain the GtkBuilderAid package for easing use of GTK Glade interface 
+files within Julia.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{You all installed Julia, right?}
+\begin{itemize}
+  \item If you're on Linux, use your package manager
+  \item If you're on Windows, go to the downloads page at julialang.org
+  \item If you're on Mac, you're on your own
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Start Julia}
+
+\begin{itemize}
+  \item In Linux, from the command line type "julia"
+  \item In Windows, use the start menu to open the REPL
+  \item In Mac, open programs however as you usually do in Mac
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Lets Get Started}
+
+\begin{minted}{julia}
+Pkg.clone("https://github.com/Matt5sean3/HackRvaJulia.jl.git")
+using HackRvaJulia
+start_intro()
+\end{minted}
+
+\begin{enumerate}
+  \item Installs the HackRvaJulia package
+  \item Loads the HackRvaJulia package into the environment
+  \item Calls the start\_intro function
+\end{enumerate}
+
+\end{frame}
+
+\end{document}
+
