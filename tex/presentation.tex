@@ -14,11 +14,40 @@
 
 \begin{frame}
 \frametitle{Who Am I?}
-I'm Matthew Balch. My career has included numerous computer languages with 
-Perl, Python, PHP, C, C++, Javascript, and many others. I've been programming 
-in Julia for around a year for work projects as an alternative to R, Python, and MATLAB.
-I also maintain the GtkBuilderAid package for easing use of GTK Glade interface 
-files within Julia.
+
+I'm Matthew Balch. My career has included numerous computer languages such as
+C, C++, Javascript, Perl, Python, PHP, and many others. I've been programming 
+in Julia for around a year for work projects as an alternative to R, Python,
+and MATLAB. I also develop the GtkBuilderAid package for easing use of GTK
+Glade interface files within Julia.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{What Was Julia Made For?}
+
+Julia was not meant as a general purpose programming language, but you wouldn't
+know that if someone didn't tell you. The use case Julia is designed around is 
+high performance technical computing as seen for physics simulations,"big data"
+analysis, and bioinformatics. The languages currently filling those niches were
+either too slow at runtime with Python, MATLAB, and R, or too slow at 
+development time with C. The goal, in short, was to deliver a language with the
+performance of a low-level language and the ease-of-use of a high level
+language.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Why Program in Julia?}
+
+\begin{itemize}
+  \item Speed
+  \item Familiar syntax
+  \item A growing library of packages
+  \item Excellent integration with C and Fortran binaries
+  \item Metaprogramming
+  \item Parallel programming
+\end{itemize}
 
 \end{frame}
 
@@ -28,6 +57,7 @@ files within Julia.
   \item If you're on Linux, use your package manager
   \item If you're on Windows, go to the downloads page at julialang.org
   \item If you're on Mac, you're on your own
+  \item If you don't have your computer, you've got bigger problems.
 \end{itemize}
 \end{frame}
 
@@ -35,10 +65,12 @@ files within Julia.
 \frametitle{Start Julia}
 
 \begin{itemize}
-  \item In Linux, from the command line type "julia"
-  \item In Windows, use the start menu to open the REPL
-  \item In Mac, open programs however as you usually do in Mac
+  \item In Linux, from the command line type "julia".
+  \item In Windows, use the start menu to open the REPL.
+  \item In Mac, open programs however you usually do in Mac.
+  \item A desktop launcher should work in whatever operating system you use.
 \end{itemize}
+
 
 \end{frame}
 
@@ -55,7 +87,129 @@ start_intro()
   \item Installs the HackRvaJulia package
   \item Loads the HackRvaJulia package into the environment
   \item Calls the start\_intro function
+  \item Follow the instructions in the GUI
 \end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Hello World!}
+
+\begin{minted}{julia}
+function hello(name::AbstractString = "World")
+  println("Hello $name!")
+end
+
+hello(name::Symbol) =
+  hello(string(name))
+
+hello(name, times::Integer) =
+  [hello(name) for i in 1:times]
+
+hello()
+hello("HackRVA")
+hello("HackRVA", 5)
+\end{minted}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Hello World! (cont.)}
+
+These lines alone show us quite a lot.
+
+C-style function calls, function name followed by comma seperated arguments in 
+parentheses.
+\begin{minted}{julia}
+hello("HackRVA", 5)
+\end{minted}
+
+Type Annotation
+\begin{minted}{julia}
+name::AbstractString
+name::Symbol
+\end{minted}
+
+long form function definition, type annotation
+\begin{minted}{julia}
+function hello(name::AbstractString = "World")
+  println("Hello $name!")
+end
+\end{minted}
+
+short form function definition
+\begin{minted}{julia}
+hello(name::Symbol) =
+  hello(string(name))
+\end{minted}
+
+  \item multiple dispatch
+  \item type annotations
+  \item begin-end style code blocks
+  \item Strings are bounded by quotes
+
+Dollar-sign substitution in strings
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Type System}
+
+Types are either concrete or abstract. A sort of type tree can be generated
+using abstract types. A concrete type cannot be 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Multiple Dispatch}[fragile]
+
+Rather than objects having methods, functions have methods.
+
+When a function is called the types of the input arguments are used to decide 
+which method of the function is used.
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Method Ambiguity}
+
+When there is ambiguity as to which method would be used, the julia interpreter
+will tell you at definition time. When this happens, adding another method to 
+resolve the ambiguity should fix everything.
+
+\begin{minted}{julia}
+# This causes an ambiguity warning
+f(x::Float64, y) = println("First argument is a float")
+f(x, y::Float64) = println("Second argument is a float")
+\end{minted}
+
+\begin{minted}{julia}
+# This won't cause an ambiguity warning
+f(x::Float64, y::Float64) = println("Both arguments are floats")
+f(x::Float64, y) = println("Only first argument is a float")
+f(x, y::Float64) = println("Only second argument is a float")
+\end{minted}
+\end{frame}
+
+\begin{frame}
+\frametitle{Packages}
+
+Julia's package system is built around git. If you don't know git this could 
+get confusing.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Ongoing Problems in Julia Land}
+
+\begin{itemize}
+  \item Backwards compatibility breaking changes are still happening
+  \item There are still mistakes in even some fundamental packages
+\end{itemize}
+
+Julia is an open source project and the package system included in the
+installation is well designed to make contributing a solution to these 
+problems frictionless.
 
 \end{frame}
 
