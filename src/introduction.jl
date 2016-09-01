@@ -1,7 +1,8 @@
-#!/usr/bin/env julia
 
 using Gtk
 using GtkBuilderAid
+
+export start_intro
 
 @GtkBuilderAid function_name(build_intro) begin
 
@@ -52,7 +53,7 @@ end
 @guarded function activate_cb(app_ptr, udata)
   
   app = GObject(app_ptr)
-  built = @GtkBuilder(filename="introduction.glade")
+  built = @GtkBuilder(filename=joinpath(Pkg.dir("HackRvaJulia"), "resources", "introduction.glade"))
   
   build_intro(built, built)
   
@@ -63,9 +64,15 @@ end
   nothing
 end
 
-println("Preventing Heisenbug by Printing!")
-app = @GtkApplication("com.matt5sean3.juliademo.introduction", 0)
-signal_connect(activate_cb, app, "activate", Void, (), false, ())
-
-run(app)
+"""
+Starts a GTK+ GUI for introducing people to the power of julia. This 
+demonstrates that even complicated GUI applications are possible rather
+easily. It doesn't even take that many lines of code either.
+"""
+function start_intro()
+  println("Preventing a GTK related Heisenbug by Printing!")
+  app = @GtkApplication("com.matt5sean3.juliademo.introduction", 0)
+  signal_connect(activate_cb, app, "activate", Void, (), false, ())
+  run(app)
+end
 

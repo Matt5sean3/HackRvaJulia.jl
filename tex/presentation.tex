@@ -25,7 +25,6 @@ Glade interface files within Julia.
 
 \begin{frame}
 \frametitle{What Was Julia Made For?}
-
 Julia was not meant as a general purpose programming language, but you wouldn't
 know that if someone didn't tell you. The use case Julia is designed around is 
 high performance technical computing as seen for physics simulations,"big data"
@@ -34,12 +33,10 @@ either too slow at runtime with Python, MATLAB, and R, or too slow at
 development time with C. The goal, in short, was to deliver a language with the
 performance of a low-level language and the ease-of-use of a high level
 language.
-
 \end{frame}
 
 \begin{frame}
 \frametitle{Why Program in Julia?}
-
 \begin{itemize}
   \item Speed
   \item Familiar syntax
@@ -48,7 +45,22 @@ language.
   \item Metaprogramming
   \item Parallel programming
 \end{itemize}
+\end{frame}
 
+\begin{frame}
+\frametitle{Some Caution About This Presentation}
+This presentation was written for people who already know how to program. Julia
+may or may not be a good beginner's language, but this is not a beginner's
+presentation.
+
+While creating this presentation I realized that fully describing a computer
+language is a lengthy task that I can't achieve within even the most patient
+person's attention span. For this reason I'll mostly gloss over points where
+Julia behaves identically to most other languages, such as infix arithmetic,
+function call styling, and control flow. Points that differ slightly, such
+as type annotation, for loops, and collections, will be mentioned in passing.
+Points that differ significantly, such as metaprogramming, iterators, will 
+have more focus.
 \end{frame}
 
 \begin{frame}
@@ -63,38 +75,38 @@ language.
 
 \begin{frame}
 \frametitle{Start Julia}
-
 \begin{itemize}
   \item In Linux, from the command line type "julia".
   \item In Windows, use the start menu to open the REPL.
   \item In Mac, open programs however you usually do in Mac.
   \item A desktop launcher should work in whatever operating system you use.
 \end{itemize}
+\end{frame}
 
-
+\begin{frame}
+\frametitle{Quick Way to Learn More}
+From the REPL it's possible to get help on a function by typing "?" then the
+function's name. This works with most major functions and many of the better
+developed packages. This is a very useful feature, don't be shy about using it.
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Lets Get Started}
-
 \begin{minted}{julia}
 Pkg.clone("https://github.com/Matt5sean3/HackRvaJulia.jl.git")
 using HackRvaJulia
 start_intro()
 \end{minted}
-
 \begin{enumerate}
   \item Installs the HackRvaJulia package
   \item Loads the HackRvaJulia package into the environment
   \item Calls the start\_intro function
   \item Follow the instructions in the GUI
 \end{enumerate}
-
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Hello World!}
-
 \begin{minted}{julia}
 function hello(name::AbstractString = "World")
   println("Hello $name!")
@@ -110,19 +122,11 @@ hello()
 hello("HackRVA")
 hello("HackRVA", 5)
 \end{minted}
-
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Hello World! (cont.)}
-
 These lines alone show us quite a lot.
-
-C-style function calls, function name followed by comma seperated arguments in 
-parentheses.
-\begin{minted}{julia}
-hello("HackRVA", 5)
-\end{minted}
 
 Type Annotation
 \begin{minted}{julia}
@@ -130,7 +134,14 @@ name::AbstractString
 name::Symbol
 \end{minted}
 
-long form function definition, type annotation
+Dollar-sign substitution in strings
+
+Semi-colons not needed, newlines mean something
+\begin{minted}{julia}
+"Hello $name!"
+\end{minted}
+
+long form function definition
 \begin{minted}{julia}
 function hello(name::AbstractString = "World")
   println("Hello $name!")
@@ -143,13 +154,29 @@ hello(name::Symbol) =
   hello(string(name))
 \end{minted}
 
-  \item multiple dispatch
-  \item type annotations
-  \item begin-end style code blocks
-  \item Strings are bounded by quotes
+begin-end style code blocks
+\end{frame}
 
-Dollar-sign substitution in strings
+\begin{frame}[fragile]
+\frametitle{Return Values}
+Every function and code block will has a return value. If no return statement
+is used then the last statement is the return value. This allows for 
+surprisingly compact code quite often.
 
+\begin{minted}{julia}
+point1 = (3, 3)
+point2 = (6, 7)
+function distance(p1, p2)
+  (p1[1] - p2[1])^2
+end
+distance(point1, point2) == 5
+\end{minted}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Let's Try Things Now!}
+To let all of that sink in, create a function that 
 \end{frame}
 
 \begin{frame}
@@ -197,6 +224,27 @@ f(x, y::Float64) = println("Only second argument is a float")
 Julia's package system is built around git. If you don't know git this could 
 get confusing.
 
+There are a few basic package commands for retrieving packages.
+\begin{minted}{julia}
+Pkg.init() # Initial configuration of the package manager
+Pkg.add("package_name") # Install the named package
+Pkg.rm("package_name") # Uninstall the named package
+Pkg.generate("package_name", "license") # Create a new package with that name
+\end{minted}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Let's Make Packages}
+
+\begin{enumerate}
+  \item If you don't have a Github account, make one now
+  \item Think about what the package should do
+  \item Create a new Julia package named accordingly
+\end{enumerate}
+
+If you have questions about using Julia, git, or anything else now is the time 
+to ask.
 \end{frame}
 
 \begin{frame}
