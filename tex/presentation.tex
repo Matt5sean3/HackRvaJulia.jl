@@ -2,6 +2,9 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{minted}
+\usepackage{xcolor}
+\definecolor{bgcolor}{RGB}{5, 218, 186}
+\setbeamercolor{background canvas}{bg=bgcolor}
 
 \title[Julia]{Introduction to the Julia Programming Language}
 \author{Matthew Balch}
@@ -13,29 +16,6 @@
 \frame{\titlepage}
 
 \begin{frame}
-\frametitle{Who Am I?}
-
-I'm Matthew Balch. My career has included numerous computer languages such as
-C, C++, Javascript, Perl, Python, PHP, and many others. I've been programming 
-in Julia for around a year for work projects as an alternative to R, Python,
-and MATLAB. I also develop the GtkBuilderAid package for easing use of GTK
-Glade interface files within Julia.
-
-\end{frame}
-
-\begin{frame}
-\frametitle{What Was Julia Made For?}
-Julia was not meant as a general purpose programming language, but you wouldn't
-know that if someone didn't tell you. The use case Julia is designed around is 
-high performance technical computing as seen for physics simulations,"big data"
-analysis, and bioinformatics. The languages currently filling those niches were
-either too slow at runtime with Python, MATLAB, and R, or too slow at 
-development time with C. The goal, in short, was to deliver a language with the
-performance of a low-level language and the ease-of-use of a high level
-language.
-\end{frame}
-
-\begin{frame}
 \frametitle{Why Program in Julia?}
 \begin{itemize}
   \item Speed
@@ -45,22 +25,6 @@ language.
   \item Metaprogramming
   \item Parallel programming
 \end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Some Caution About This Presentation}
-This presentation was written for people who already know how to program. Julia
-may or may not be a good beginner's language, but this is not a beginner's
-presentation.
-
-While creating this presentation I realized that fully describing a computer
-language is a lengthy task that I can't achieve within even the most patient
-person's attention span. For this reason I'll mostly gloss over points where
-Julia behaves identically to most other languages, such as infix arithmetic,
-function call styling, and control flow. Points that differ slightly, such
-as type annotation, for loops, and collections, will be mentioned in passing.
-Points that differ significantly, such as metaprogramming, iterators, will 
-have more focus.
 \end{frame}
 
 \begin{frame}
@@ -84,10 +48,12 @@ have more focus.
 \end{frame}
 
 \begin{frame}
-\frametitle{Quick Way to Learn More}
-From the REPL it's possible to get help on a function by typing "?" then the
-function's name. This works with most major functions and many of the better
-developed packages. This is a very useful feature, don't be shy about using it.
+\frametitle{Quick Ways to Learn More}
+\begin{itemize}
+  \item Type "?" then the function name to see documentation
+  \item Go to docs.julialang.org
+  \item Say something if I'm going to fast
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -174,21 +140,26 @@ distance(point1, point2) == 5
 
 \end{frame}
 
-\begin{frame}
-\frametitle{Let's Try Things Now!}
-To let all of that sink in, create a function that 
-\end{frame}
-
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Type System}
 
 Types are either concrete or abstract. A sort of type tree can be generated
-using abstract types. A concrete type cannot be 
+using abstract types. A concrete type cannot be have a sub-type.
+
+\begin{minted}{julia}
+abstract AnAbstractType <: ASuperType
+
+type AConcreteType <: AnAbstractType
+  unannotated_member
+  annotated_member::SomeType
+end
+
+\end{minted}
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Multiple Dispatch}[fragile]
+\frametitle{Multiple Dispatch}
 
 Rather than objects having methods, functions have methods.
 
@@ -218,7 +189,143 @@ f(x, y::Float64) = println("Only second argument is a float")
 \end{minted}
 \end{frame}
 
+\begin{frame}[fragile]
+\frametitle{Control Flow}
+Essentially the same as most other languages
+
+If statements only handle the boolean type. Any other type will throw an error.
+\begin{minted}{julia}
+if condition
+  # happens if condition is true
+end
+
+if 1 # Will throw a type error
+  # something-something
+end
+
+if value == 0
+  # do something for the value being 0
+elseif value < 0
+  # do something for the value being below 0
+else
+  # do something for the value being over 0
+end
+
+# if statements can return values too
+x = if value == 0
+  0
+elseif value < 0
+  -1
+else
+  1
+end
+
+# ternary operator is also supported
+x = (condition)? iftrue : iffalse 
+\end{minted}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Control Flow (cont.)}
+
+\begin{minted}{julia}
+# if statements can return values too
+x = if value == 0
+  0
+elseif value < 0
+  -1
+else
+  1
+end
+
+# ternary operator is also supported
+x = (condition)? iftrue : iffalse 
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Control Flow (cont.)}
+
+For and while loops are also an option
+
+\begin{minted}{julia}
+# while loops are available
+while keep
+  # hopefully the condition changes
+end
+
+# while blocks always return "nothing"
+x = while condition
+  # hopefully this loop exits somehow
+end
+
+# for blocks also return nothing
+x = for i in 1:5
+  # happens 5 times
+  # return value of the block doesn't go anywhere
+  not_returned_value
+end
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Control Flow (cont.)}
+
+\begin{minted}{julia}
+# However, comprehensions return an array
+x = [2 for i in 1:5]
+
+# Comprehensions allows simulating for blocks that return lists
+x = [begin
+  # do something to compute the element
+  list_element
+end for i in iterable]
+\end{minted}
+
+\end{frame}
+
 \begin{frame}
+\frametitle{Let's Make Sure We Know the Basics}
+You should all now know enough to implement FizzBuzz
+
+\begin{itemize}
+  \item Print the numbers 1 through 100
+  \item for multiples of 3 print Fizz instead of the number
+  \item for multiples of 5 print Buzz instead of the number
+  \item for multiples of both 3 and 5 print FizzBuzz instead of the number
+  \item for extra credit implement it as one line
+  \item to prove you're a badass do it without repetition
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Iterables}
+
+Iterables are very useful
+
+To use something as an iterable the start, next, and done methods must be 
+defined
+
+\begin{minted}{julia}
+# returns the initial state for iteration
+start(iter) = initial_state
+
+# returns a tuple containing the item in the iterator and the next 
+# iteration state
+next(iter, state) = (item, next_state)
+
+# returns whether iteration has completed
+done(iter, state) = is_finished
+
+# A length method is necessary to use the iterable in a comprehension
+length(iter) = number_of_times_iterating
+\end{minted}
+
+\end{frame}
+
+\begin{frame}[fragile]
 \frametitle{Packages}
 
 Julia's package system is built around git. If you don't know git this could 
@@ -234,8 +341,27 @@ Pkg.generate("package_name", "license") # Create a new package with that name
 
 \end{frame}
 
+\begin{frame}[fragile]
+\frametitle{Using Packages}
+
+Like most languages, to do much beyond the basics using just what's built-in
+would be ridiculous.
+
+\begin{minted}{julia}
+use JSON
+
+import Base: start, next, done, length
+
+\end{minted}
+
+One important thing to know is that more methods can be added to imported
+functions but not to functions brought into scope via "use". The Core and
+Base packages are always implicitly used.
+
+\end{frame}
+
 \begin{frame}
-\frametitle{Let's Make Packages}
+\frametitle{Let's Make a Package}
 
 \begin{enumerate}
   \item If you don't have a Github account, make one now
@@ -245,6 +371,57 @@ Pkg.generate("package_name", "license") # Create a new package with that name
 
 If you have questions about using Julia, git, or anything else now is the time 
 to ask.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Generate a Package}
+
+\begin{minted}{julia}
+Pkg.generate("PackageName", "License")
+\end{minted}
+
+\begin{itemize}
+  \item A few initial files will be created and a git repository will be initialized.
+  \item A few license strings are recognized: MIT, BSD, and ASL
+  \item The package's location is found with Pkg.dir("PackageName")
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Basics of a Package}
+
+\begin{itemize}
+  \item The REQUIRE file lists the dependencies of the package
+  \item README.md and LICENSE.md are automatically added
+  \item A test directory and src directory with basic templates are created
+  \item Continuous Integration files for Travis-CI (.travis.yml) and Appveyor (appveyor.yml) are made
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Making a Github Account}
+
+\begin{enumerate}
+  \item Go to github.com
+  \item Click on Sign Up
+  \item Go through the account creation process
+  \item Add an SSL certificate
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Configuring Git}
+
+\begin{enumerate}
+  \item Use the semi-colon to use a shell command in Julia
+  \item git config --global user.name "Your Name"
+  \item git config --global user.email "youremail@example.com"
+  \item Connect using SSL keys
+\end{enumerate}
+
 \end{frame}
 
 \begin{frame}
@@ -258,6 +435,18 @@ to ask.
 Julia is an open source project and the package system included in the
 installation is well designed to make contributing a solution to these 
 problems frictionless.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation Generation}
+
+\begin{enumerate}
+  \item documentation is important (if you didn't already know)
+  \item In-code documentation keeps things simple
+  \item Julia, like most languages, has a documentation generation package
+  \item Install Documenter.jl
+\end{enumerate}
 
 \end{frame}
 

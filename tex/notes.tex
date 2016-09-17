@@ -1,0 +1,74 @@
+\documentclass{article}
+\usepackage{minted}
+
+\begin{document}
+
+\section{Who Am I?}
+
+I'm Matthew Balch. My career has included numerous computer languages such as
+C, C++, Javascript, Perl, Python, PHP, and many others. I've been programming 
+in Julia for around a year for work projects as an alternative to R, Python,
+and MATLAB. I also develop the GtkBuilderAid package for easing use of GTK
+Glade interface files within Julia.
+
+\section{What is Julia?}
+
+Julia was not meant as a general purpose programming language, but you wouldn't
+know that if someone didn't tell you. The use case Julia is designed around is 
+high performance technical computing as seen for physics simulations,"big data"
+analysis, and bioinformatics. The languages currently filling those niches were
+either too slow at runtime with Python, MATLAB, and R, or too slow at 
+development time with C. The goal, in short, was to deliver a language with the
+performance of a low-level language and the ease-of-use of a high level
+language.
+
+\section{Some Caution About This Presentation}
+
+This presentation was written for people who already know how to program. Julia
+may or may not be a good beginner's language, but this is not a beginner's
+presentation.
+
+While creating this presentation I realized that fully describing a computer
+language is a lengthy task that I can't achieve within even the most patient
+person's attention span. For this reason I'll mostly gloss over points where
+Julia behaves identically to most other languages, such as infix arithmetic,
+function call styling, and control flow. Points that differ slightly, such
+as type annotation, for loops, and collections, will be mentioned in passing.
+Points that differ significantly, such as metaprogramming, iterators, will 
+have more focus.
+
+\section{A Quick Test to Get Started}
+
+Before moving on let's all implement FizzBuzz.
+
+Making a one-liner FizzBuzz in Julia without repetition is possible.
+
+A hint:
+Use the "any" function and boolean short-circuiting to create a one-liner
+without any repetition.
+
+\begin{minted}{julia}
+[begin 
+  (any((
+    i % 3 == 0 && print("Fizz") == nothing, 
+    i % 5 == 0 && print("Buzz") == nothing)) || 
+  print(i) == nothing); println()
+end for i in 1:100]
+\end{minted}
+
+That's the basics of what you need to know to just use Julia, so we'll move
+on to proper development next.
+
+\section{Let's Look at Some Code}
+
+Look at an existing package 
+
+\section{Something to Work On}
+
+Just talking about code isn't sufficient. In order to learn, practice is 
+necessary. I'm here to help everyone get started on whatever project they
+want within Julia. Starting by contributing to an existing package is
+advisable.
+
+\end{document}
+
