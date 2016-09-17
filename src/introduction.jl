@@ -1,6 +1,7 @@
 
 using Gtk
 using GtkBuilderAid
+using LibCURL
 
 export start_intro
 
@@ -17,23 +18,21 @@ end
 @guarded function submit(widget, built)
   store = GAccessor.object(built, "programming_languages")
   known_languages = []
-  println("Chosen color:")
   color_iter = Ref(GtkTreeIter())
-  if ccall(
+  color = if ccall(
       (:gtk_combo_box_get_active_iter, Gtk.libgtk), 
       Cint, 
       (Ptr{GObject}, Ptr{GtkTreeIter}), 
       GAccessor.object(built, "color_selection"),
       color_iter) != 0
     color_store = GAccessor.object(built, "colors")
-    println(GtkTreeModel(color_store)[color_iter[], 1])
+    GtkTreeModel(color_store)[color_iter[], 1]
   else
-    println("No color chosen")
+    "DislikesColor"
   end
-  
+
   model = GtkTreeModel(store)
   iter = Gtk.mutable(GtkTreeIter)
-  println("I know:")
   if Gtk.get_iter_first(model, iter)
     last = true
     while last
@@ -43,9 +42,26 @@ end
       last = next(model, iter)
     end
   end
+
+  curl = curl_easy_init()
+
+  curl_easy_setopt(curl, CURLOPT_URL, string(
+    "http://hackrva.org/cgi-bin/collect.py?languages=",
+    join(known_languages, ","),
+    "&color=",
+    color))
+  curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1)
+
+#   c_curl_read_cb = cfunction(curl_read_cb, Csize_t, (Ptr{Void}, Csize_t, Csize_t, Ptr{Void}))
+#   curl_easy_setopt(curl, CURLOPT_READFUNCTION, c_curl_read_cb)
+  
+  println("Chosen color:")
+  println(color)
+  println("I know:")
   println(known_languages)
   destroy(GAccessor.object(built, "main_window"))
-  nothing
+  # Blocks execution
+  curl_easy_perform(curl)
 end
 
 end
